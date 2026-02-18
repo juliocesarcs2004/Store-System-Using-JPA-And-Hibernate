@@ -8,11 +8,24 @@ import br.com.alura.loja.util.JPAUtil;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CadastroDeProduto {
 
     public static void main(String[] args) {
+        cadastrarProduto();
+        Long id = 1L;
+        EntityManager em = JPAUtil.getEntityManager();
+        ProdutodDao produtoDao = new ProdutodDao(em);
 
+        Produto p = produtoDao.buscarPorId(1L);
+        System.out.println(p.getPreco());
+
+        List<Produto> todos = produtoDao.buscarTodos();
+        todos.forEach(p2 -> System.out.println(p.getNome()));
+    }
+
+    private static void cadastrarProduto() {
         Categoria celulares = new Categoria("CELULARES");
         Produto celular = new Produto("Xiaomi Redmi",
                 "Muito Legal",new BigDecimal("800"), celulares  );
@@ -25,6 +38,7 @@ public class CadastroDeProduto {
 
         categoriaDao.cadastrar(celulares);
         produtoDao.cadastrar(celular);
+
         em.getTransaction().commit();
         em.close();
     }
